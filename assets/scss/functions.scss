@@ -1,0 +1,7 @@
+@function px2vw ($px, $resolution: 1366) {
+	@return $px / $resolution * 100 * 1vw;
+}
+
+@function px2rem ($px, $baseFont) {
+	@return $px / $baseFont * 1rem;
+}

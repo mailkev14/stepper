@@ -1,0 +1,38 @@
+@media all and (min-width:1440px) {
+
+}
+
+@media all and (min-width:1600px) {
+    .nav {
+        height: px2vw(20, 1920);
+
+        &.menu {
+            height: px2vw(21, 1920);
+        }
+    }
+
+    .nav-line {
+        height: 2px;
+
+        .menu-open .nav &:last-child {
+            transform: rotate(-45deg);
+        }
+    }
+
+    .cta {
+        &::before {
+            width: calc(100% - 6px);
+            height: calc(100% - 6px);
+            top: 3px;
+            left: 3px;
+        }
+    }
+}
+
+@media all and (min-width:1680px) {
+
+}
+
+@media all and (min-width:1920px) {
+
+}

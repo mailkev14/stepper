@@ -1,0 +1,25 @@
+{
+  "name": "stepper",
+  "version": "1.0.0",
+  "description": "Stepper application in Vanilla JS for modern browsers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mailkev14/stepper.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mailkev14/stepper/issues"
+  },
+  "homepage": "https://github.com/mailkev14/stepper#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^6.1.0",
+    "gulp-sass": "^4.0.2"
+  }
+}

@@ -7,8 +7,6 @@
 	<base href="/stepper/" />
 
 	<link rel="shortcut icon" href="favicon.ico" />
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" />
-	<link rel="stylesheet" href="assets/css/reset.css" />
 	<link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
@@ -42,12 +40,12 @@
 					<h2 class="site-step-title">1. Patient Details</h2>
 					<div class="site-form-control required">
 						<label for="name" class="site-form-control__label">Full Name</label>
-						<input id="name" type="text" value="" class="site-form-control__input" placeholder="Enter full name" required />
+						<input id="name" type="text" value="" class="site-form-control__input" placeholder="Enter full name" maxlength="200" required />
 					</div>
 
-					<div class="site-form-control required">
+					<div class="site-form-control has-mobile required" data-prefix="+91">
 						<label for="mobile" class="site-form-control__label">Mobile</label>
-						<input id="mobile" type="text" value="" class="site-form-control__input" placeholder="Enter mobile number" required />
+						<input id="mobile" type="number" maxlength="10" value="" class="site-form-control__input mobile" placeholder="Enter mobile number" required />
 					</div>
 
 					<div class="site-form-control required">
@@ -62,12 +60,12 @@
 
 					<div class="site-form-control required">
 						<label for="age" class="site-form-control__label">Age (In Years)</label>
-						<input id="age" type="number" value="" min="0" class="site-form-control__input age" placeholder="Enter Age" required />
+						<input id="age" type="number" value="" min="1" max="120" class="site-form-control__input age" placeholder="Enter Age" required />
 					</div>
 
-					<div class="site-form-control required">
+					<div class="site-form-control has-select required">
 						<label for="gender" class="site-form-control__label">Gender</label>
-						<select id="gender" class="site-form-control__input age" required>
+						<select id="gender" class="site-form-control__input select" required>
 							<option value="">Select Gender</option>
 							<option value="male">Male</option>
 							<option value="female">Female</option>
@@ -76,8 +74,12 @@
 					</div>
 
 					<div class="site-form-control">
-						<label for="Allergies" class="site-form-control__label">Allergies (if any)</label>
-						<textarea id="Allergies" class="site-form-control__input textarea" placeholder="Enter Allergies (if any)" required></textarea>
+						<label for="allergies" class="site-form-control__label">Allergies (if any)</label>
+						<textarea id="allergies" class="site-form-control__input textarea" placeholder="Enter Allergies (if any)" ></textarea>
+					</div>
+
+					<div class="site-form-control cta-container">
+						<button id="next_step1" class="cta">Next</button>
 					</div>
 				</form>
 			</div>
@@ -87,6 +89,31 @@
 		</div>
 	</main>
 
-	<script src="assets/js/main.js" async></script>
+	<script>
+		var scripts = ['assets/js/flatpickr.js', 'assets/js/main.js'],
+			loadScript = function (i) {
+				var script;
+
+				if ( scripts[i] ) {
+					script = document.createElement('script');
+					script.type = 'text/javascript';
+					script.async = true;
+
+					script.onload = function () {
+						loadScript(i+1);
+					};
+
+					script.onerror = function () {
+						console.error('Error in loading script[src="' + scripts[i] + '"]! No more scripts will be loaded.');
+					};
+
+					script.src = scripts[i];
+
+					document.head.appendChild(script);
+				}
+			};
+
+		loadScript(0);
+	</script>
 </body>
 </html>
