@@ -16,7 +16,9 @@
 					allergies: document.getElementById('allergies')
 				},
 				init: function () {
-					var _v, _this = this;
+					var _v,
+                        _this = this,
+                        session = getSessionData();
 
 					if ( !app.step1 ) {
 						app.step1 = {
@@ -123,6 +125,8 @@
 				app['step'+stepNum][state] = e.target.value;
 
 				if ( typeof fn === 'function' ) fn();
+
+                // persistData(true);
 			};
 
 			if ( el.type === 'number' ) {
@@ -164,11 +168,13 @@
                 }
             }
         },
-		persistData = function () {
+		persistData = function (session) {
+            var storage = session ? sessionStorage : localStorage;
+
 			if ( typeof app === 'object' ) {
-				localStorage.stepper = JSON.stringify(app);
+				storage.stepper = JSON.stringify(app);
 			} else {
-				localStorage.stepper = JSON.stringify(app = {});
+				storage.stepper = JSON.stringify(app = {});
 			}
 		},
 		removeError = function (vars) {
@@ -221,6 +227,22 @@
 				}
 			});
 		},
+        getSessionData = function () {
+            if ( typeof sessionStorage.app ) {
+                try {
+                    return JSON.parse(sessionStorage.app);
+                } catch (e) {
+                    sessionStorage.app = JSON.stringify({});
+
+                    return {};
+                }
+            } else {
+                sessionStorage.app = JSON.stringify({});
+
+                return {};
+            }
+        },
+        activeTab = 0,
 		app;
 
 	initApp();
@@ -229,9 +251,17 @@
 		a.addEventListener('click', function (e) {
 			e.preventDefault();
 
-			if ( !dom.hasClass('active') ) {
+			if ( !dom.hasClass(a, 'active') ) {
 				showTab(i);
 			}
 		});
+
+        if ( typeof steps[i].isValid === 'function' && steps[i].isValid() ) {
+            dom.addClass(a, 'completed');
+
+            activeTab = i;
+        }
 	});
+
+    showTab(Math.min(activeTab + 1, steps.length - 1));
 }.call(window));
