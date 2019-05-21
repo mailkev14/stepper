@@ -83,17 +83,37 @@
                     </div>
                 </form>
             </div>
+
             <div class="site-step" id="step2" data-step="2">
                 <form class="site-step-form" id="step2-form">
                     <h2 class="site-step-title">2. Symptoms</h2>
-                    <div class="site-form-control required">
-                        <label for="symptoms" class="site-form-control__label">Symptoms</label>
-                        <select id="symptoms" class="site-form-control__input" required multiple></select>
-                    </div>
+                    <fieldset id="symptoms-container" class="site-form-control multiple-input-wrapper required">
+                        <legend class="site-form-control__label">Symptoms</legend>
 
-                    <div class="site-form-control">
-                        <label for="custom-symptoms" class="site-form-control__label">Any Other Symptoms</label>
-                        <select id="custom-symptoms" value="" class="site-form-control__input" multiple></select>
+                        <div class="multiple-input-container" id="symptoms">
+                        	<label class="multiple-input__label multiple-input__col" for="symptoms_1">
+                        		<input id="symptoms_1" type="checkbox" name="symptoms[]"  />
+                        		<span class="multiple-input__checkbox"></span>
+                        		<span class="multiple-input__lbl"></span>
+                        	</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="site-form-control multiple-input-wrapper">
+                        <legend for="custom-symptoms" class="site-form-control__label">Any Other Symptom(s)</legend>
+
+                        <div class="site-form-control has-cta">
+                            <label for="custom-symptom-name" class="site-form-control__label">Symptom</label>
+                            <input id="custom-symptom-name" type="text" value="" class="site-form-control__input" placeholder="Enter Your Symptom" maxlength="100" />
+                            <button id="step2-custom-cta" type="button" class="cta">Add</button>
+                        </div>
+
+                        <div class="multiple-input-container" id="custom-symptoms"></div>
+                    </fieldset>
+
+                    <div class="site-form-control required">
+                        <label for="not-well-since" class="site-form-control__label">Not well since (in days)</label>
+                        <input id="not-well-since" type="number" value="" min="1" max="300" class="site-form-control__input" placeholder="Not well since" required />
                     </div>
 
                     <div class="site-form-control cta-container wrap-clear">
@@ -107,8 +127,10 @@
         </div>
     </main>
 
+    <img src="assets/images/tick.svg" width="1" height="1" alt="">
+
     <script>
-        var scripts = ['assets/js/array-polyfill.js', 'assets/js/flatpickr.js', 'assets/js/main.js'],
+        var scripts = ['assets/js/array-polyfill.js', 'assets/js/string-polyfill.js', 'assets/js/flatpickr.js', 'assets/js/main.js'],
             loadScript = function (i) {
                 var script;
 
@@ -119,15 +141,21 @@
 
                     script.onload = function () {
                         loadScript(i+1);
+
+                        script = undefined;
                     };
 
                     script.onerror = function () {
                         console.error('Error in loading script[src="' + scripts[i] + '"]! No more scripts will be loaded.');
+
+                        loadScript = script = scripts = i = undefined;
                     };
 
                     script.src = scripts[i];
 
                     document.head.appendChild(script);
+                } else {
+                    loadScript = scripts = i = undefined;
                 }
             };
 

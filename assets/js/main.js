@@ -59,7 +59,7 @@
                         resetForm(e, _this);
                     };
 				},
-				isValid: function () {
+				isValid: function (softValidate) {
 					var valid = true,
 						ageMin = +this.vars.age.min,
 						ageMax = +this.vars.age.max;
@@ -69,32 +69,37 @@
 					removeError(this.vars);
 
 					if ( !filter.name.test(app.step1.name.trim()) ) {
-						dom.addClass(this.vars.name, 'error');
+						if ( softValidate ) return false;
 
+						dom.addClass(this.vars.name, 'error');
 						valid = false;
 					}
 
 					if ( app.step1.mobile.length !== 10 ) {
-						dom.addClass(this.vars.mobile, 'error');
+						if ( softValidate ) return false;
 
+						dom.addClass(this.vars.mobile, 'error');
 						valid = false;
 					}
 
 					if ( !filter.email.test(app.step1.email) ) {
-						dom.addClass(this.vars.email, 'error');
+						if ( softValidate ) return false;
 
+						dom.addClass(this.vars.email, 'error');
 						valid = false;
 					}
 
 					if ( app.step1.age < ageMin || app.step1.age > ageMax ) {
-						dom.addClass(this.vars.age, 'error');
+						if ( softValidate ) return false;
 
+						dom.addClass(this.vars.age, 'error');
 						valid = false;
 					}
 
 					if ( app.step1.gender === '' ) {
-						dom.addClass(this.vars.gender, 'error');
+						if ( softValidate ) return false;
 
+						dom.addClass(this.vars.gender, 'error');
 						valid = false;
 					}
 
@@ -106,28 +111,217 @@
 				container: document.getElementById('step2'),
                 vars: {
                     'symptoms': document.getElementById('symptoms'),
-                    'custom-symptoms': document.getElementById('custom-symptoms')
+                    'custom-symptoms': document.getElementById('custom-symptoms'),
+                    'not-well-since': document.getElementById('not-well-since')
                 },
                 init: function () {
                     var _v,
                         _this = this,
-                        symptoms = [];
+                        symptoms = ['Abdominal Pain', 'Back Pain', 'Chest Pain', 'Ear Pain', 'Head Pain', 'Tooth Pain', 'Chronic Pain', 'Feeling Feverish', 'Nausea', 'Light-headed', 'Chills', 'Dizzy', 'Short of breath', 'Blurred Vision', 'Excessive Sweating', 'Palpitation'],
+                       	customCTA = document.getElementById('step2-custom-cta'),
+                       	customSymptomIP = document.getElementById('custom-symptom-name'),
+                       	chkContainer = this.vars.symptoms.firstElementChild,
+                       	fragment = new DocumentFragment(),
+                       	getSymptomsChk = function (id, name, text, checked, onchange) {
+				        	var chk_container = chkContainer.cloneNode(true),
+				        		input = chk_container.querySelector('input');
+
+				        	chk_container.htmlFor = id;
+
+							input.id = id;
+							input.name = name;
+							input.value = text;
+							input.checked = checked === true;
+							input.onchange = onchange;
+
+							chk_container.querySelector('.multiple-input__lbl').innerHTML = text;
+
+							return chk_container;
+				        },
+                       	createCustomSymptomDOM = function (symptom) {
+                       		var customSymptomWrapper = document.createElement('div'),
+                       			customSymptomLabel = document.createElement('span'),
+                       			customSymptomCTA = document.createElement('button');
+
+                   			customSymptomWrapper.className = 'custom-symptom-wrapper multiple-input__col';
+
+                   			customSymptomLabel.className = 'custom-symptom-label';
+                   			customSymptomLabel.innerHTML = symptom;
+
+                   			customSymptomCTA.className = 'custom-symptom-cta';
+                   			customSymptomCTA.type = 'button';
+                   			customSymptomCTA.innerHTML = '&times;';
+                   			customSymptomCTA.onclick = function (e) {
+                   				var index;
+
+                   				if (confirm('Are you sure you want to remove this symptom?')) {
+                   					// get index of symptom
+                   					index = app.step2['custom-symptoms'].indexOf(symptom);
+
+                   					// remove index from app.step2 array
+									app.step2['custom-symptoms'].splice(index, 1);
+
+									// unbind onclick listener
+									customSymptomCTA.onclick = undefined;
+
+									// remove customSymptomWrapper from DOM
+									customSymptomWrapper.parentNode.removeChild(customSymptomWrapper);
+                   				}
+                   			};
+
+                   			customSymptomWrapper.appendChild(customSymptomLabel);
+                   			customSymptomWrapper.appendChild(customSymptomCTA);
+
+                   			// append newly created custom symptom to DOM
+                   			_this.vars['custom-symptoms'].appendChild(customSymptomWrapper);
+                       	},
+                       	createCustomSymptom = function (symptom) {
+                       		var input,
+                       			foundSymptom = symptoms.filter(function (s) {
+                       				return s.toLowerCase() === symptom.toLowerCase();
+                       			}),
+                       			foundStep2Symptom = app.step2.symptoms.filter(function (s) {
+                       				return s.toLowerCase() === symptom.toLowerCase();
+                       			}),
+                       			foundCustomSymptom = app.step2['custom-symptoms'].filter(function (s) {
+                       				return s.toLowerCase() === symptom.toLowerCase();
+                       			});
+
+                       		// check if custom symptom exists in predefined sypmtoms array
+                       		if ( foundSymptom.length > 0 ) {
+
+                       			// check if user has not previously selected the symptom from predefined list
+                       			if (  foundStep2Symptom.length === 0 ) {
+                       				app.step2.symptoms.push(symptom);
+
+                       				if ( input = _this.vars.symptoms.querySelector('input[value="' + symptom + '"]') ) {
+                       					input.checked = true;
+                       				}
+                       			}
+                       		} else if ( foundCustomSymptom.length === 0 ) {
+                       			// if this custom symptom was not already added to step2 custom-symptoms array
+
+                       			// create custom symptom DOM
+                       			createCustomSymptomDOM(symptom);
+
+                       			// add newly created custom symptom to app.step2 array
+                       			app.step2['custom-symptoms'].push(symptom);
+                       		}
+                       	};
+
+                   	if ( chkContainer ) {
+						this.vars.symptoms.removeChild( this.vars.symptoms.firstElementChild );
+					}
 
                     if ( !app.step2 ) {
                         app.step2 = {
-                            symptoms: [],
-                            'custom-symptoms': []
+                            'symptoms': [],
+                            'custom-symptoms': [],
+                            'not-well-since': ''
                         };
                     }
 
-                    for (_v in this.vars) {
-                        this.vars[_v].value = app.step2[_v];
+                    // 1. iterate over symptoms and append to DocumentFragment to minize DOM interactions
+                    symptoms.forEach(function (symptom, index) {
+                    	var checked = app.step2.symptoms.indexOf(symptom) > -1;
 
-                        addListener(this.vars[_v], this.num, _v);
-                    }
+                    	fragment.appendChild(getSymptomsChk('symptoms_' + index, 'symptoms[]', symptom, checked, function (e) {
+                    		var index;
+
+                    		if ( this.checked ) {
+                    			app.step2.symptoms.push(this.value);
+                    		} else {
+                    			index = app.step2.symptoms.indexOf(this.value);
+
+                    			app.step2.symptoms.splice(index, 1);
+                    		}
+                    	}));
+                    });
+
+                    //  append symptoms fragment to DOM
+                    this.vars.symptoms.appendChild(fragment);
+
+                    // 2. custom symptom start
+                    // iterate over step2 custom symptoms array and append to DOM
+                    app.step2['custom-symptoms'].forEach(createCustomSymptomDOM);
+
+                    // initialize custom symptom input and CTA
+                    customSymptomIP.value = '';
+                    customCTA.disabled = true;
+
+                    customSymptomIP.onkeyup = function (e) {
+                    	customCTA.disabled = this.value.trim().length === 0;
+                    };
+                    customSymptomIP.onchange = function (e) {
+                    	this.value = this.value.trim();
+                    };
+                    customCTA.onclick = function (e) {
+                    	createCustomSymptom(customSymptomIP.value.trim());
+                    	customSymptomIP.value = '';
+                    	customCTA.disabled = true;
+                    };
+                    // 2. custom symptom end
+
+                    /* 3. not well start */
+                    this.vars['not-well-since'].value = app.step2['not-well-since'];
+                    addListener(this.vars['not-well-since'], this.num, 'not-well-since');
+                    /* 3. not well end */
+
+                    document.getElementById('prev_step2').onclick = function (e) {
+                    	showTab(0);
+                    };
+
+                    // form submit
+                    document.getElementById('step2-form').onsubmit = function (e) {
+                    	e.preventDefault();
+
+                    	if ( typeof _this.isValid === 'function' && _this.isValid() ) {
+                    		persistData();
+
+                    		showTab(2);
+                    	}
+                    };
+
+                    fragment = undefined;
                 },
-                isValid: function () {
+                isValid: function (softValidate) {
+                	var valid = true,
+                		notWellSince = +app.step2['not-well-since'];
 
+                	if ( app.step2.symptoms.length === 0 ) {
+                		if( softValidate ) return false;
+
+                		dom.addClass(document.getElementById('symptoms-container'), 'error');
+
+                		valid = false;
+                	} else {
+                		dom.removeClass(document.getElementById('symptoms-container'), 'error');
+                	}
+
+                	if ( isNaN(notWellSince) ) {
+                		if ( softValidate ) return false;
+
+                		dom.addClass(this.vars['not-well-since'], 'error');
+
+                		valid = false;
+                	}
+
+                	// validate not well since
+                	if (
+                		notWellSince < +this.vars['not-well-since'].min || 
+                		(
+                			this.vars['not-well-since'].max && 
+                			notWellSince > +this.vars['not-well-since'].max
+                		)
+                	) {
+                		if ( softValidate ) return false;
+
+                		dom.addClass(this.vars['not-well-since'], 'error');
+
+                		valid = false;
+                	}
+
+                	return valid;
                 }
 			},
 			{
@@ -245,10 +439,12 @@
 					dom.removeClass(a, 'active');
 					dom.removeClass(steps[i].container, 'active');
 
-					if ( typeof(steps[i].isValid) === 'function' && steps[i].isValid() ) {
+					if ( typeof(steps[i].isValid) === 'function' && steps[i].isValid(true) ) {
 						dom.addClass(a, 'completed');
 					}
 				}
+
+				window.scrollTo(0, 0);
 			});
 		},
         getSessionData = function () {
@@ -280,7 +476,7 @@
 			}
 		});
 
-        if ( typeof steps[i].isValid === 'function' && steps[i].isValid() ) {
+        if ( typeof steps[i].isValid === 'function' && steps[i].isValid(true) ) {
             dom.addClass(a, 'completed');
 
             activeTab = i;

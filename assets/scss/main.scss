@@ -31,7 +31,7 @@ textarea {
     margin-right: auto;
 }
 .cta,
-.reset-cta {
+.nostyle-cta {
     padding: .6em 1.5em;
     text-align: center;
     cursor: pointer;
@@ -39,6 +39,13 @@ textarea {
     background: none;
     font: inherit;
     float: left;
+
+    &[disabled] {
+        opacity: .5;
+        background-color: #ccc;
+        border-color: #ccc;
+        pointer-events: none;
+    }
 }
 
 .cta {
@@ -54,11 +61,15 @@ textarea {
     }
 }
 
+.nostyle-cta,
 .reset-cta {
     border: 0;
+    margin-right: 1em;
+}
+
+.reset-cta {
     padding-left: 2em;
     background: url(../images/reset.svg) no-repeat .5em center / 1.5em auto transparent;
-    margin-right: 1em;
 }
 
 /* header start */
@@ -191,12 +202,54 @@ textarea {
             padding-left: 2.5em;
         }
     }
+
+    &.multiple-input-wrapper {
+        padding-left: 0;
+        border: 1px solid #eee;
+        margin-top: 2em;
+
+        &.error {
+            border-color: $error;
+            box-shadow: 0 0 .5em 0 $error;
+        }
+
+        legend.site-form-control__label {
+            position: relative;
+            top: 0;
+            transform: none;
+            padding: 0;
+            width: auto;
+            margin-bottom: .5em;
+            margin-top: -.5em;
+            margin-left: .5em;
+            background-color: #fff;
+            padding: 0 1em;
+
+            & + .site-form-control {
+                margin-bottom: 1em;
+            }
+        }
+
+        label.site-form-control__label {
+            padding-left: 1em;
+        }
+    }
+
+    &.has-cta {
+        padding-right: 7em;
+
+        .cta {
+            position: absolute;
+            top: 0;
+            right: 1em;
+        }
+    }
 }
 .site-form-control__label {
     position: absolute;
     top: 50%;
     left: 0%;
-    width: var(--form-label-width);
+    width: $form-label-width;
     transform: translateY(-50%);
     padding-right: .5em;
 }
@@ -217,10 +270,10 @@ textarea {
     }
 
     &.error {
-        border-color: red;
+        border-color: $error;
 
         &:focus {
-            box-shadow: 0 0 .7em 0 red;
+            box-shadow: 0 0 .7em 0 $error;
         }
     }
 
@@ -243,5 +296,74 @@ textarea {
         padding-top: .5em;
         padding-bottom: .5em;
     }
+}
+
+.multiple-input-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: 0 .8em .8em;
+}
+
+.multiple-input__col {
+    width: 32%;
+    position: relative;
+    margin-top: 1em;
+
+    &:not(:nth-child(3n+1)) {
+        margin-left: 1%;
+    }
+}
+.multiple-input__label {
+    padding-left: 2em;
+    display: block;
+    cursor: pointer;
+
+    input {
+        display: none;
+
+        &:checked + .multiple-input__checkbox {
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: url(../images/tick.svg) no-repeat center center / 80% auto transparent;
+            }
+        }
+    }
+}
+.multiple-input__checkbox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1.25em;
+    height: 1.25em;
+    background-color: #ececff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.custom-symptom-wrapper {
+    padding-right: 2em;
+    padding-bottom: .5em;
+    border-bottom: 1px solid #ccc;
+}
+.custom-symptom-cta {
+    padding: 0;
+    background: none;
+    outline: none;
+    border: 0;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1.5em;
+    line-height: .5;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 /* main content end */
