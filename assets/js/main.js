@@ -48,11 +48,15 @@
 						e.preventDefault();
 
 						if ( _this.isValid() ) {
+                            persistData();
+
 							showTab(1);
 						}
 					};
 
-					persistData();
+                    document.getElementById('reset_step1').onclick = function (e) {
+                        resetForm(e, _this);
+                    };
 				},
 				isValid: function () {
 					var valid = true,
@@ -119,8 +123,6 @@
 				app['step'+stepNum][state] = e.target.value;
 
 				if ( typeof fn === 'function' ) fn();
-
-				persistData();
 			};
 
 			if ( el.type === 'number' ) {
@@ -151,6 +153,17 @@
 				typeof step.init === 'function' && step.init();
 			});
 		},
+        resetForm = function (e, step) {
+            var i;
+
+            e.preventDefault();
+
+            if ( confirm('Are you sure you want to clear the above fields?') ) {
+                for (i in _this.vars) {
+                    step.vars[i].value = app['step' + step.num][i] = '';
+                }
+            }
+        },
 		persistData = function () {
 			if ( typeof app === 'object' ) {
 				localStorage.stepper = JSON.stringify(app);

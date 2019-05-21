@@ -30,22 +30,35 @@ textarea {
     margin-left: auto;
     margin-right: auto;
 }
-.cta {
+.cta,
+.reset-cta {
     padding: .6em 1.5em;
     text-align: center;
+    cursor: pointer;
+    font-weight: 600;
+    background: none;
+    font: inherit;
+    float: left;
+}
+
+.cta {
     color: #fff;
     background-color: $theme-color;
     border: 1px solid $theme-color;
-    cursor: pointer;
-    font: inherit;
     border-radius: .2em;
-    font-weight: 600;
     transition: color .2s, background-color .2s;
-    
+
     &:hover {
         color: $theme-color;
         background-color: #fff;
     }
+}
+
+.reset-cta {
+    border: 0;
+    padding-left: 2em;
+    background: url(../images/reset.svg) no-repeat .5em center / 1.5em auto transparent;
+    margin-right: 1em;
 }
 
 /* header start */
@@ -53,7 +66,7 @@ textarea {
     padding: 2em 0;
     position: relative;
     margin-bottom: 2em;
-    
+
     &::before {
         content: '';
         position: absolute;
@@ -80,13 +93,13 @@ textarea {
     align-items: center;
     width: 25%;
     min-height: 2.2em;
-    padding: 1em .1em;
+    padding: 1em .1em 1em px2vw(3);
     background-color: $inactive-tab-color;
     border: 1px solid #ccc;
     opacity: .3;
     cursor: default;
     pointer-events: none;
-    
+
     &:first-child {
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
@@ -139,14 +152,14 @@ textarea {
     padding-bottom: 2em;
 }
 .site-step-form {
-    width: 80%;
+    width: 70%;
     margin: 0 auto;
 }
 .site-form-control {
     position: relative;
     padding-left: $form-label-width;
     margin-top: 1.5em;
-    
+
     &.required .site-form-control__label::after {
         content: '*';
         position: relative;
@@ -162,18 +175,20 @@ textarea {
     }
 
     &.has-mobile {
-        padding-left: calc(#{$form-label-width} + 2.5em);
         &::before {
             content: attr(data-prefix);
             width: 2.2em;
             color: #aaa;
             position: absolute;
             top:0;
-            left: $form-label-width;
-            background-color: #fff;
+            left: calc(#{$form-label-width} + .5em);
             z-index: 1;
             height: 100%;
             line-height: 2.5em;
+        }
+
+        input {
+            padding-left: 2.5em;
         }
     }
 }
@@ -192,9 +207,9 @@ textarea {
     background-color: #fff;
     border-radius: .3em;
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 0 .5em;
     transition: border-color .2s, box-shadow .2s;
-    
+
     &:focus {
         border-color: $theme-color;
         box-shadow: 0 0 .7em 0 $theme-color;
@@ -210,12 +225,9 @@ textarea {
     }
 
     &.mobile {
-        &::-webkit-inner-spin-button,
-        &::-webkit-outer-spin-button {
-            display: none;
-        }
+        @include removeSpinner;
     }
-    
+
     &.select {
         padding-top: 0;
         padding-bottom: 0;
@@ -228,6 +240,8 @@ textarea {
 
     &.textarea {
         height: 5em;
+        padding-top: .5em;
+        padding-bottom: .5em;
     }
 }
 /* main content end */

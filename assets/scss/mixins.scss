@@ -2,3 +2,13 @@
     margin-left:auto;
     margin-right:auto;
 }
+
+@mixin removeSpinner() {
+    -moz-appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+        display: none;
+        margin: 0;
+    }
+}
