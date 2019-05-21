@@ -17,8 +17,7 @@
 				},
 				init: function () {
 					var _v,
-                        _this = this,
-                        session = getSessionData();
+                        _this = this;
 
 					if ( !app.step1 ) {
 						app.step1 = {
@@ -104,7 +103,32 @@
 			},
 			{
 				num: 2,
-				container: document.getElementById('step2')
+				container: document.getElementById('step2'),
+                vars: {
+                    'symptoms': document.getElementById('symptoms'),
+                    'custom-symptoms': document.getElementById('custom-symptoms')
+                },
+                init: function () {
+                    var _v,
+                        _this = this,
+                        symptoms = [];
+
+                    if ( !app.step2 ) {
+                        app.step2 = {
+                            symptoms: [],
+                            'custom-symptoms': []
+                        };
+                    }
+
+                    for (_v in this.vars) {
+                        this.vars[_v].value = app.step2[_v];
+
+                        addListener(this.vars[_v], this.num, _v);
+                    }
+                },
+                isValid: function () {
+
+                }
 			},
 			{
 				num: 3,
