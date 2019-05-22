@@ -115,8 +115,7 @@
                     'not-well-since': document.getElementById('not-well-since')
                 },
                 init: function () {
-                    var _v,
-                        _this = this,
+                    var _this = this,
                         symptoms = ['Abdominal Pain', 'Back Pain', 'Chest Pain', 'Ear Pain', 'Head Pain', 'Tooth Pain', 'Chronic Pain', 'Feeling Feverish', 'Nausea', 'Light-headed', 'Chills', 'Dizzy', 'Short of breath', 'Blurred Vision', 'Excessive Sweating', 'Palpitation'],
                        	customCTA = document.getElementById('step2-custom-cta'),
                        	customSymptomIP = document.getElementById('custom-symptom-name'),
@@ -166,6 +165,8 @@
 
 									// remove customSymptomWrapper from DOM
 									customSymptomWrapper.parentNode.removeChild(customSymptomWrapper);
+
+                                    modelPersistData();
                    				}
                    			};
 
@@ -197,6 +198,8 @@
                        				if ( input = _this.vars.symptoms.querySelector('input[value="' + symptom + '"]') ) {
                        					input.checked = true;
                        				}
+
+                                    modelPersistData();
                        			}
                        		} else if ( foundCustomSymptom.length === 0 ) {
                        			// if this custom symptom was not already added to step2 custom-symptoms array
@@ -206,6 +209,8 @@
 
                        			// add newly created custom symptom to app.step2 array
                        			app.step2['custom-symptoms'].push(symptom);
+
+                                modelPersistData();
                        		}
                        	};
 
@@ -304,29 +309,97 @@
                 		dom.addClass(this.vars['not-well-since'], 'error');
 
                 		valid = false;
-                	}
-
-                	// validate not well since
-                	if (
-                		notWellSince < +this.vars['not-well-since'].min || 
-                		(
-                			this.vars['not-well-since'].max && 
-                			notWellSince > +this.vars['not-well-since'].max
-                		)
-                	) {
+                	} else if ( notWellSince < +this.vars['not-well-since'].min || notWellSince > +this.vars['not-well-since'].max ) {
                 		if ( softValidate ) return false;
 
                 		dom.addClass(this.vars['not-well-since'], 'error');
 
                 		valid = false;
-                	}
+                	} else {
+                        dom.removeClass(this.vars['not-well-since'], 'error');
+                    }
 
                 	return valid;
                 }
 			},
 			{
 				num: 3,
-				container: document.getElementById('step3')
+				container: document.getElementById('step3'),
+                vars: {
+                    'schedule-date': document.getElementById('schedule-date'),
+                    'schedule-time': document.getElementById('schedule-time'),
+                    'payment-mode': document.getElementById('payment-mode')
+                },
+                init: function () {
+                    var _v,
+                        _this = this,
+                        dtp;
+
+                    if ( !app.step3 ) {
+                        app.step3 = {
+                            'schedule-date': '',
+                            'schedule-time': '',
+                            'payment-mode': ''
+                        };
+                    }
+
+                    for (_v in this.vars) {
+                        this.vars[_v].value = app.step3[_v];
+
+                        addListener(this.vars[_v], this.num, _v);
+                    }
+
+                    dtp = flatpickr(this.vars['schedule-date'], {
+                        dateFormat: 'd-m-Y',
+                        minDate: new Date()
+                    });
+
+                    document.getElementById('prev_step3').onclick = function (e) {
+                        showTab(1);
+                    };
+
+                    document.getElementById('step3-form').onsubmit = function (e) {
+                        e.preventDefault();
+
+                        if ( _this.isValid() ) {
+                            persistData();
+
+                            showTab(3);
+                        }
+                    };
+                },
+                isValid: function (softValidate) {
+                    var valid = true,
+                        regDate = /^\d{2}\-\d{2}\-\d{4}$/;
+
+                    removeError(this.vars);
+
+                    if ( !regDate.test(app.step3['schedule-date']) ) {
+                        if ( softValidate ) return false;
+
+                        dom.addClass(this.vars['schedule-date'], 'error');
+
+                        valid = false;
+                    }
+
+                    if ( app.step3['schedule-time'] === '' ) {
+                        if ( softValidate ) return false;
+
+                        dom.addClass(this.vars['schedule-time'], 'error');
+
+                        valid = false;
+                    }
+
+                    if ( app.step3['payment-mode'] === '' ) {
+                        if ( softValidate ) return false;
+
+                        dom.addClass(this.vars['payment-mode'], 'error');
+
+                        valid = false;
+                    }
+
+                    return valid;
+                }
 			},
 			{
 				num: 4,
@@ -344,7 +417,7 @@
 
 				if ( typeof fn === 'function' ) fn();
 
-                // persistData(true);
+                modelPersistData();
 			};
 
 			if ( el.type === 'number' ) {
@@ -384,7 +457,12 @@
                 for (i in _this.vars) {
                     step.vars[i].value = app['step' + step.num][i] = '';
                 }
+
+                modelPersistData();
             }
+        },
+        modelPersistData = function () {
+            // persistData();
         },
 		persistData = function (session) {
             var storage = session ? sessionStorage : localStorage;
@@ -443,9 +521,9 @@
 						dom.addClass(a, 'completed');
 					}
 				}
-
-				window.scrollTo(0, 0);
 			});
+
+			window.scrollTo(0, 0);
 		},
         getSessionData = function () {
             if ( typeof sessionStorage.app ) {
@@ -465,7 +543,7 @@
         activeTab = 0,
 		app;
 
-	initApp();
+    initApp();
 
 	siteNav.forEach(function (a, i) {
 		a.addEventListener('click', function (e) {

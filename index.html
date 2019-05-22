@@ -122,7 +122,50 @@
                     </div>
                 </form>
             </div>
-            <div class="site-step" id="step3" data-step="3"></div>
+
+            <div class="site-step" id="step3" data-step="3">
+                <form class="site-step-form" id="step3-form">
+                    <h2 class="site-step-title">3. Slot &amp; Payment Selection</h2>
+                    <div class="site-form-control required">
+                        <label for="schedule-date" class="site-form-control__label">Schedule Date for call / visit</label>
+                        <input id="schedule-date" type="text" value="" class="site-form-control__input" placeholder="Enter a feasible date for your appointment" maxlength="10" required />
+                    </div>
+
+                    <div class="site-form-control has-select required">
+                        <label for="schedule-time" class="site-form-control__label">Schedule Time Slot for call / visit</label>
+                        <select id="schedule-time" class="site-form-control__input select" required>
+                            <option value="">Select Time Slot</option>
+                            <option value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM</option>
+                            <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
+                            <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM</option>
+                            <option value="12:00 PM - 01:00 PM">12:00 PM - 01:00 PM</option>
+                            <option value="01:00 PM - 02:00 PM">01:00 PM - 02:00 PM</option>
+                            <option value="02:00 PM - 03:00 PM">02:00 PM - 03:00 PM</option>
+                            <option value="03:00 PM - 04:00 PM">03:00 PM - 04:00 PM</option>
+                            <option value="04:00 PM - 05:00 PM">04:00 PM - 05:00 PM</option>
+                            <option value="05:00 PM - 06:00 PM">05:00 PM - 06:00 PM</option>
+                            <option value="06:00 PM - 07:00 PM">06:00 PM - 07:00 PM</option>
+                            <option value="07:00 PM - 08:00 PM">07:00 PM - 08:00 PM</option>
+                        </select>
+                    </div>
+
+                    <div class="site-form-control has-select required">
+                        <label for="payment-mode" class="site-form-control__label">Preferred mode of Payment</label>
+                        <select id="payment-mode" class="site-form-control__input select" required>
+                            <option value="">Select Payment Mode</option>
+                            <option value="cash">Cash</option>
+                            <option value="card">Card</option>
+                            <option value="online">Online</option>
+                        </select>
+                    </div>
+
+                    <div class="site-form-control cta-container wrap-clear">
+                        <button id="prev_step3" type="button" class="nostyle-cta prev-cta">Prev</button>
+                        <button id="review_step3" type="submit" class="cta">Review</button>
+                    </div>
+                </form>
+            </div>
+
             <div class="site-step" id="step4" data-step="4"></div>
         </div>
     </main>
