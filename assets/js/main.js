@@ -104,6 +104,9 @@
 					}
 
 					return valid;
+				},
+				onShow: function () {
+
 				}
 			},
 			{
@@ -320,6 +323,9 @@
                     }
 
                 	return valid;
+                },
+                onShow: function () {
+
                 }
 			},
 			{
@@ -399,11 +405,104 @@
                     }
 
                     return valid;
+                },
+                onShow: function () {
+
                 }
 			},
 			{
 				num: 4,
-				container: document.getElementById('step4')
+				container: document.getElementById('step4'),
+				vars: {
+					step1: {
+						'name': document.getElementById('step1-name'),
+						'mobile': document.getElementById('step1-mobile'),
+						'email': document.getElementById('step1-email'),
+						'address': document.getElementById('step1-address'),
+						'age': document.getElementById('step1-age'),
+						'gender': document.getElementById('step1-gender'),
+						'allergies': document.getElementById('step1-allergies'),
+					},
+					step2: {
+						'symptoms': document.getElementById('step2-symptoms'),
+						'not-well-since': document.getElementById('step2-not-well-since')
+					},
+					step3: {
+						'schedule-date': document.getElementById('step3-schedule-date'),
+						'schedule-time': document.getElementById('step3-schedule-time'),
+						'payment-mode': document.getElementById('step3-payment-mode')
+					}
+				},
+				init: function () {
+					this.onShow();
+
+					document.getElementById('edit_step1').onclick = function (e) {
+						showTab(0);
+					};
+
+					document.getElementById('edit_step2').onclick = function (e) {
+						showTab(1);
+					};
+
+					document.getElementById('edit_step3').onclick = function (e) {
+						showTab(2);
+					};
+
+					document.getElementById('step4_book').onclick = function (e) {
+						if (confirm('Are you sure you want to book with the following details?')) {
+							alert('Booked successfully!');
+						}
+					};
+				},
+				onShow: function () {
+					var _app, i, _this = this, fragment;
+					try {
+						_app = JSON.parse(localStorage.stepper);
+
+						steps.forEach(function (step, stepIndex) {
+							if ( typeof step.isValid === 'function' ) {
+								if ( step.isValid(true) ) {
+									if ( step.num === 1 || step.num === 3  ) {
+										for (i in _app['step' + step.num]) {
+											_this.vars['step' + step.num][i].innerHTML = _app['step' + step.num][i] || '-NA-';
+										}
+									} else if (step.num === 2) {
+										fragment = new DocumentFragment();
+
+										(_app.step2.symptoms.concat(_app.step2['custom-symptoms']))
+											.forEach(function (symptom) {
+												var li = document.createElement('li');
+
+												li.innerHTML = symptom;
+												li.className = 'detail-list-item';
+
+												fragment.appendChild(li);
+											});
+
+										_this.vars.step2['symptoms'].innerHTML = '';
+										_this.vars.step2['symptoms'].appendChild(fragment);
+
+										_this.vars.step2['not-well-since'].innerHTML = _app.step2['not-well-since'];
+
+										fragment = undefined;
+									}
+								} else {
+									showTab(stepIndex);
+								}
+							}
+						});
+
+					} catch (e) {
+						console.error('error in app', e);
+					}
+				},
+				isValid: function (softValidate) {
+					return (
+						typeof steps[0].isValid === 'function' && steps[0].isValid(true) && 
+						typeof steps[1].isValid === 'function' && steps[1].isValid(true) &&
+						typeof steps[2].isValid === 'function' && steps[2].isValid(true)
+					);
+				}
 			}
 		],
 		addListener = function (el, stepNum, state, fn) {
@@ -513,6 +612,8 @@
 				if ( i === index ) {
 					dom.addClass(a, 'active');
 					dom.addClass(steps[i].container, 'active');
+
+					typeof steps[i].onShow === 'function' && steps[i].onShow();
 				} else {
 					dom.removeClass(a, 'active');
 					dom.removeClass(steps[i].container, 'active');
@@ -549,9 +650,9 @@
 		a.addEventListener('click', function (e) {
 			e.preventDefault();
 
-			if ( !dom.hasClass(a, 'active') ) {
+			/*if ( !dom.hasClass(a, 'active') ) {
 				showTab(i);
-			}
+			}*/
 		});
 
         if ( typeof steps[i].isValid === 'function' && steps[i].isValid(true) ) {

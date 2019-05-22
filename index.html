@@ -66,9 +66,9 @@
                         <label for="gender" class="site-form-control__label">Gender</label>
                         <select id="gender" class="site-form-control__input select" required>
                             <option value="">Select Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
                         </select>
                     </div>
 
@@ -132,7 +132,7 @@
                     </div>
 
                     <div class="site-form-control has-select required">
-                        <label for="schedule-time" class="site-form-control__label">Schedule Time Slot for call / visit</label>
+                        <label for="schedule-time" class="site-form-control__label">Schedule time slot for call / visit</label>
                         <select id="schedule-time" class="site-form-control__input select" required>
                             <option value="">Select Time Slot</option>
                             <option value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM</option>
@@ -166,7 +166,110 @@
                 </form>
             </div>
 
-            <div class="site-step" id="step4" data-step="4"></div>
+            <div class="site-step" id="step4" data-step="4">
+                <div class="site-step-form">
+                    <fieldset class="site-form-control multiple-input-wrapper section-details-container">
+                        <legend class="site-form-control__label"><h4>1. Patient Details</h4></legend>
+
+                        <div class="detail-container">
+                            <div class="site-form-control">
+                                <label for="step1-name" class="site-form-control__label">Full Name</label>
+                                <div id="step1-name" class="site-form-control__input"></div>
+                            </div>
+
+                            <div class="site-form-control has-mobile" data-prefix="+91">
+                                <label for="step1-mobile" class="site-form-control__label">Mobile</label>
+                                <div id="step1-mobile" class="site-form-control__input"></div>
+                            </div>
+
+                            <div class="site-form-control">
+                                <label for="step1-email" class="site-form-control__label">Email</label>
+                                <div id="step1-email" class="site-form-control__input"></div>
+                            </div>
+
+                            <div class="site-form-control has-multiline">
+                                <label for="step1-address" class="site-form-control__label">Address</label>
+                                <div id="step1-address" class="site-form-control__input"></div>
+                            </div>
+
+                            <div class="site-form-control">
+                                <label for="step1-age" class="site-form-control__label">Age</label>
+                                <div id="step1-age" class="site-form-control__input"></div>
+                            </div>
+
+                            <div class="site-form-control">
+                                <label for="step1-gender" class="site-form-control__label">Gender</label>
+                                <div id="step1-gender" class="site-form-control__input"></div>
+                            </div>
+
+                            <div class="site-form-control">
+                                <label for="step1-allergies" class="site-form-control__label has-multiline">Allergies (if any)</label>
+                                <div id="step1-allergies" class="site-form-control__input"></div>
+                            </div>
+
+                            <div class="site-form-control cta-container wrap-clear">
+                                <button id="edit_step1" type="button" class="nostyle-cta cta-link edit-cta"><svg class="edit-cta-icon" height="1024" width="896" viewBox="0 0 1024 896">
+                                        <path d="M704 64L576 192l192 192 128-128L704 64zM0 768l0.688 192.562L192 960l512-512L512 256 0 768zM192 896H64V768h64v64h64V896z"/>
+                                    </svg> Edit Patient Details</button>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="site-form-control multiple-input-wrapper section-details-container">
+                        <legend class="site-form-control__label"><h4>2. Symptoms</h4></legend>
+
+                        <div class="detail-container">
+                            <div class="site-form-control">
+                                <label for="step2-symptoms" class="site-form-control__label">Symptoms</label>
+                                <ul id="step2-symptoms" class="site-form-control__input list"></ul>
+                            </div>
+
+                            <div class="site-form-control">
+                                <label for="step2-not-well-since" class="site-form-control__label">Not Well Since (in days)</label>
+                                <div id="step2-not-well-since" class="site-form-control__input"></div>
+                            </div>
+
+                            <div class="site-form-control cta-container wrap-clear">
+                                <button id="edit_step2" type="button" class="nostyle-cta cta-link edit-cta">
+                                    <svg class="edit-cta-icon" height="1024" width="896" viewBox="0 0 1024 896">
+                                        <path d="M704 64L576 192l192 192 128-128L704 64zM0 768l0.688 192.562L192 960l512-512L512 256 0 768zM192 896H64V768h64v64h64V896z"/>
+                                    </svg> Edit Symptoms</button>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="site-form-control multiple-input-wrapper section-details-container">
+                        <legend class="site-form-control__label"><h4>3. Slot &amp; Payment Selection</h4></legend>
+
+                        <div class="detail-container">
+                            <div class="site-form-control">
+                                <label for="step3-schedule-date" class="site-form-control__label">Schedule Date for call / visit</label>
+                                <div id="step3-schedule-date" class="site-form-control__input"></div>
+                            </div>
+
+                            <div class="site-form-control">
+                                <label for="step3-schedule-time" class="site-form-control__label">Schedule time slot for call / visit</label>
+                                <div id="step3-schedule-time" class="site-form-control__input"></div>
+                            </div>
+
+                            <div class="site-form-control">
+                                <label for="step3-payment-mode" class="site-form-control__label">Preferred mode of payment</label>
+                                <div id="step3-payment-mode" class="site-form-control__input"></div>
+                            </div>
+
+                            <div class="site-form-control cta-container wrap-clear">
+                                <button id="edit_step3" type="button" class="nostyle-cta cta-link edit-cta"><svg class="edit-cta-icon" height="1024" width="896" viewBox="0 0 1024 896">
+                                        <path d="M704 64L576 192l192 192 128-128L704 64zM0 768l0.688 192.562L192 960l512-512L512 256 0 768zM192 896H64V768h64v64h64V896z"/>
+                                    </svg> Edit Slot &amp; Payment Selection</button>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div class="site-form-control cta-container wrap-clear">
+                        <button id="step4_book" type="button" class="cta">Book</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
