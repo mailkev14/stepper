@@ -120,7 +120,7 @@ textarea {
         border-bottom-right-radius: 5px;
     }
     &+& {
-        border-left: 0;
+        border-left-width: 0;
     }
 
     &.completed,

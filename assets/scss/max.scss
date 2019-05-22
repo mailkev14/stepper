@@ -11,7 +11,30 @@
 }
 
 @media all and (max-width:767px) {
-    
+    .site-step-nav {
+        display: none;
+        width: 100%;
+        padding-left: 7px;
+        padding-right: 7px;
+
+        &.active {
+            display: block;
+        }
+
+        &+& {
+            border-left-width: 1px;
+        }
+
+        &,
+        &:first-child,
+        &:last-child {
+            border-radius: 5px;
+        }
+    }
+
+    .site-step-form {
+        width: 100%;
+    }
 }
 
 @media all and (max-width:640px) {
