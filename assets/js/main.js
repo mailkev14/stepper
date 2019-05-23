@@ -456,9 +456,14 @@
 				},
 				onShow: function () {
 					var _app, i, _this = this, fragment;
+
 					try {
 						_app = JSON.parse(localStorage.stepper);
+					} catch (e) {
+						console.log(e);
+					}
 
+					try {
 						steps.forEach(function (step, stepIndex) {
 							if ( typeof step.isValid === 'function' ) {
 								if ( step.isValid(true) ) {
@@ -488,12 +493,12 @@
 									}
 								} else {
 									showTab(stepIndex);
+									throw 'break out of loop';
 								}
 							}
 						});
-
 					} catch (e) {
-						console.error('error in app', e);
+						console.log(e)
 					}
 				},
 				isValid: function (softValidate) {
@@ -641,7 +646,7 @@
                 return {};
             }
         },
-        activeTab = 0,
+        activeTab = -1,
 		app;
 
     initApp();
